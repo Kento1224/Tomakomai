@@ -1,0 +1,66 @@
+<!DOCTYPE html>                                                                                                                                                         {% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>HousekeepingBook</title>
+        <link rel="stylesheet" type="text/css"
+        href="{% static 'money/style.css' %}">
+    </head>
+    <body>
+        <div class="top">
+            <div >
+                <h1>{{ year }}年{{ month }}月</h1>
+            </div>
+            <div class="move_month">
+                <a href="/money/{{ prev_year }}/{{ prev_month }}">{{ prev_month }}月</a>
+            </div>
+            <div class="move_month">
+                <a href="/money/{{ next_year }}/{{ next_month }}">{{ next_month }}月</a>
+            </div>
+        </div>
+        <div class="outer">
+            <div class="form-money">
+                <form action="/money/" method="post">
+                    {% csrf_token %}
+                    {{ form.as_table }}
+                    <input type="submit" value="送信">
+                </form>
+            </div>
+            <div class="wrapper">
+                <div class="main">
+                    <table>
+                        <tr>
+                            <th>日付</th>
+                            <th>金額</th>
+                            <th>用途</th>
+                            <th>カテゴリー</th>
+                            <th>取引場所</th>
+                        </tr>
+                        {% for m in money %}
+                        <tr>
+                            <td>{{ m.use_date }}</td>
+                            <td>{{ m.cost }}円</td>
+                            <td>{{ m.detail }}</td>
+                            <td>{{ m.category }}</td>
+                            <td>{{ m.location }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="tot">
+                        合計：{{ total }}円
+                    </div>
+                </div>
+                <div class="main">
+                    <img src="/static/images/bar_{{ year }}_{{ month }}.svg"
+                    width=70%>
+                </div>
+                <div class="main">
+                    <img src="/static/images/circle_{{ year }}_{{ month }}.svg"
+                    width=70%>
+                </div>
+            </div>
+            {{ map|safe }}
+            {{ map2|safe}}
+        </div>
+    </body>
+</html>
