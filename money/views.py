@@ -17,6 +17,10 @@ import os
 import folium
 import pandas as pd
 from pathlib import Path
+
+import base64
+from io import BytesIO
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 #from ..mysite.settings import GEOIP_PATH
 # Create your views here.
@@ -39,6 +43,11 @@ class MainView(View):
         m = visualize_locations()
         m2 = visualize_locations2(year,month)
 
+        #barfig=os.path.join(BASE_DIR,'money/static/images/bar_{}_{}.svg'.format(year, month)).replace('"','')
+        #circlefig=os.path.join(BASE_DIR,'money/static/images/circle_{}_{}.svg'.format(year, month)).replace('"','')
+        barfig =draw_graph(year, month) 
+        circlefig = draw_circle(year,month)
+        
         form = SpendingForm()
         context = {'year' : year, 
                 'month' : month,
@@ -50,7 +59,9 @@ class MainView(View):
                 'total' : total,
                 'form' : form,
                 'map':m,
-                'map2':m2
+                'map2':m2,
+                'bar':barfig,
+                'circle':circlefig
                 }
 
         draw_graph(year, month) 
@@ -80,6 +91,17 @@ class MainView(View):
                 )
         return redirect(to='/money/{}/{}'.format(year, month))
 
+#プロットしたグラフを画像データとして出力するための関数
+def Output_Graph():
+	buffer = BytesIO()                   #バイナリI/O(画像や音声データを取り扱う際に利用)
+	plt.savefig(buffer, format="png")    #png形式の画像データを取り扱う
+	buffer.seek(0)                       #ストリーム先頭のoffset byteに変更
+	img   = buffer.getvalue()            #バッファの全内容を含むbytes
+	graph = base64.b64encode(img)        #画像ファイルをbase64でエンコード
+	graph = graph.decode("utf-8")        #デコードして文字列から画像に変換
+	buffer.close()
+	return graph
+
 def draw_graph(year, month):    #追加
     money = Money.objects.filter(use_date__year=year,
             use_date__month=month).order_by('use_date')
@@ -96,10 +118,12 @@ def draw_graph(year, month):    #追加
     plt.ylabel('支出額(円)', fontsize=16,fontname="MS Gothic")
 
     #staticフォルダの中にimagesというフォルダを用意しておきその中に入るようにしておく
-    barpath=os.path.join(BASE_DIR,'money/static/images/bar_{}_{}.svg'.format(year, month))
-    plt.savefig(barpath,
-            transparent=True)
-    return None
+    #barpath=os.path.join(BASE_DIR,'money/static/images/bar_{}_{}.svg'.format(year, month))
+    #plt.savefig(barpath,transparent=True)
+
+    plt.tight_layout()
+    graph = Output_Graph()
+    return graph
 
 def draw_circle(year, month):    #追加
     money = Money.objects.filter(use_date__year=year,
@@ -124,10 +148,12 @@ def draw_circle(year, month):    #追加
     #plt.ylabel('支出額(円)', fontsize=16,fontname="MS Gothic")
 
     #staticフォルダの中にimagesというフォルダを用意しておきその中に入るようにしておく
-    circlepath=os.path.join(BASE_DIR,'money/static/images/circle_{}_{}.svg'.format(year, month))
-    plt.savefig(circlepath,
-            transparent=True)
-    return None 
+    #circlepath=os.path.join(BASE_DIR,'money/static/images/circle_{}_{}.svg'.format(year, month))
+    #plt.savefig(circlepath,transparent=True)
+
+    plt.tight_layout()
+    graph = Output_Graph()
+    return graph 
 
 def visualize_locations(zoom=11):
     """日本を拡大した地図に、pandasデータフレームのlatitudeおよびlongitudeカラムをプロットする。

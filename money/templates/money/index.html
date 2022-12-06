@@ -51,11 +51,15 @@
                     </div>
                 </div>
                 <div class="main">
-                    <img src="/static/images/bar_{{ year }}_{{ month }}.svg"
+                    <!--<img src="/static/images/bar_{{ year }}_{{ month }}.svg"
+                    width=80%>-->
+                    <img src="data:image/png;base64,{{ bar | safe }}"
                     width=80%>
                 </div>
                 <div class="main">
-                    <img src="/static/images/circle_{{ year }}_{{ month }}.svg"
+                    <!--<img src="/static/images/circle_{{ year }}_{{ month }}.svg"
+                    width=80%>-->
+                    <img src="data:image/png;base64,{{ circle | safe }}"
                     width=80%>
                 </div>
             </div>
