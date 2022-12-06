@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #from ..mysite.settings import GEOIP_PATH
 # Create your views here.
 
-plt.rcParams['font.family'] = 'MS PGothic'    #日本語の文字化け防止
+#plt.rcParams['font.family'] = 'MS Gothic'    #日本語の文字化け防止
+plt.rcParams['font.family'] = 'IPAPGothic'    #日本語の文字化け防止
 
 TODAY = str(timezone.now()).split('-')
 
@@ -114,8 +115,8 @@ def draw_graph(year, month):    #追加
     plt.bar(day, cost, color='#00bfff', edgecolor='#0000ff')
     plt.grid(True)
     plt.xlim([0, 31])
-    plt.xlabel('日付', fontsize=16,fontname="MS Gothic")
-    plt.ylabel('支出額(円)', fontsize=16,fontname="MS Gothic")
+    plt.xlabel('日付', fontsize=16)#,fontname="MS Gothic")
+    plt.ylabel('支出額(円)', fontsize=16)#,fontname="MS Gothic")
 
     #staticフォルダの中にimagesというフォルダを用意しておきその中に入るようにしておく
     #barpath=os.path.join(BASE_DIR,'money/static/images/bar_{}_{}.svg'.format(year, month))
@@ -139,7 +140,7 @@ def draw_circle(year, month):    #追加
         else:
             dic_category[m.category] = int(m.cost)
 
-    plt.rcParams['font.family'] = 'MS Gothic'    
+    #plt.rcParams['font.family'] = 'MS Gothic'    
     plt.figure(figsize=(5,5),dpi=50)
     plt.pie(dic_category.values(), labels=dic_category.keys())
     #plt.grid(True)
