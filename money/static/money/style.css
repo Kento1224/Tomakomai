@@ -1,0 +1,54 @@
+table{
+  border-collapse:collapse;
+  margin:0 0;
+}
+th{
+  color:#005ab3;
+}
+td{
+  border-bottom:1px dashed #999;
+}
+th,tr:last-child td{
+  border-bottom:2px solid #005ab3;
+}
+td,th{
+  padding:10px;
+}
+/* upper side of the page */
+.top div{
+    float: left;
+}
+.top{
+    background-color: #8eff8e;
+    overflow: hidden;
+}
+.year-month{
+    margin: 20px 40px 0px 20px;
+}
+.move_month{
+    margin: 30px 10px 10px 10px;
+    font-size: 18px;
+}
+/* style around form */
+.form-money{
+    margin-top: 20px;
+}
+/* main part*/
+.tot {
+    font-weight: 900;
+}
+.outer {
+    clear: both;
+}
+.main{
+    float: left;
+    padding: 10px;
+    margin: 20px;
+}
+.wrapper {
+    display: flex;
+}
+#canvas {
+    width: 100%;
+    height: 100%;
+}
